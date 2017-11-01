@@ -18,10 +18,13 @@ public abstract class BaseActivity  extends AppCompatActivity{
         View view = LayoutInflater.from(this).inflate(getLayoutId(), null);
         setContentView(view);
         initView(view);
+        init();
     }
 
 
     public abstract int getLayoutId();
 
     public abstract void initView(View view);
+
+    public abstract void init();
 }

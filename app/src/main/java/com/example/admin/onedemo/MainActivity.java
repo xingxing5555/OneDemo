@@ -9,11 +9,13 @@ import com.example.admin.basic.bean.OneList;
 import com.example.admin.basic.impl.IndexListImpl;
 import com.example.admin.basic.inter.IndexListListener;
 import com.example.admin.basic.utils.LogUtils;
+import com.example.admin.basic.view.BottomNavigationView;
 
 public class MainActivity extends BaseActivity implements IndexListListener {
     private TextView tv_show;
-    private IndexListImpl impl;
+    private BottomNavigationView bnv_show;
 
+    private IndexListImpl impl;
 
     @Override
     public int getLayoutId() {
@@ -24,9 +26,19 @@ public class MainActivity extends BaseActivity implements IndexListListener {
     @Override
     public void initView(View view) {
         tv_show = (TextView) findViewById(R.id.tv_show);
+        bnv_show = (BottomNavigationView) findViewById(R.id.bnv_show);
+        bnv_show.setOnBottonNavigationClickListener(new BottomNavigationView.OnBottonNavigationClickListener() {
+            @Override
+            public void onClick(int position) {
+                LogUtils.e("=====position===="+position);
+            }
+        });
+    }
+
+    @Override
+    public void init() {
         impl = new IndexListImpl();
         impl.getIndexList(this);
-
     }
 
 
