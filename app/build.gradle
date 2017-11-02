@@ -28,4 +28,7 @@ dependencies {
     compile 'com.android.support.constraint:constraint-layout:1.0.2'
     testCompile 'junit:junit:4.12'
     compile project(':basic')
+    compile project(':one_all')
+    compile project(':one_first')
+    compile project(':one_me')
 }

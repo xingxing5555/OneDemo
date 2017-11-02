@@ -1,29 +1,50 @@
 package com.example.admin.one_first;
 
 
-import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
+
+import com.example.admin.basic.base.BaseFragment;
+import com.example.admin.basic.bean.IndexList;
+import com.example.admin.basic.bean.OneList;
+import com.example.admin.basic.impl.IndexListImpl;
+import com.example.admin.basic.inter.IndexListListener;
+import com.example.admin.basic.utils.LogUtils;
 
 
 /**
  * A simple {@link Fragment} subclass.
  */
-public class OnePager extends Fragment {
-
-
-    public OnePager() {
-        // Required empty public constructor
+public class OnePager extends BaseFragment implements IndexListListener {
+    private IndexListImpl impl;
+    @Override
+    public int getLayoutId() {
+        return R.layout.fragment_one_pager;
     }
-
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_one_pager, container, false);
+    public void initView(View view) {
+
     }
 
+    @Override
+    public void init() {
+        impl = new IndexListImpl();
+        impl.getIndexList(this);
+    }
+
+    @Override
+    public void initData(Object indexList) {
+        if (indexList instanceof IndexList) {
+            LogUtils.e(indexList.toString());
+            impl.getOneList(((IndexList) indexList).getData().get(0), this);
+        } else if (indexList instanceof OneList) {
+            LogUtils.e(indexList.toString());
+        }
+    }
+
+    @Override
+    public void error(String errorMsg) {
+        LogUtils.e(errorMsg);
+    }
 }

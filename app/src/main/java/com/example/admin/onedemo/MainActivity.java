@@ -1,21 +1,23 @@
 package com.example.admin.onedemo;
 
+import android.support.v4.app.FragmentManager;
 import android.view.View;
-import android.widget.TextView;
+import android.widget.FrameLayout;
 
 import com.example.admin.basic.base.BaseActivity;
-import com.example.admin.basic.bean.IndexList;
-import com.example.admin.basic.bean.OneList;
-import com.example.admin.basic.impl.IndexListImpl;
-import com.example.admin.basic.inter.IndexListListener;
-import com.example.admin.basic.utils.LogUtils;
 import com.example.admin.basic.view.BottomNavigationView;
+import com.example.admin.one_all.AllPager;
+import com.example.admin.one_first.OnePager;
+import com.example.admin.one_me.MePager;
 
-public class MainActivity extends BaseActivity implements IndexListListener {
-    private TextView tv_show;
+public class MainActivity extends BaseActivity {
     private BottomNavigationView bnv_show;
+    private FrameLayout fl_container;
+    private FragmentManager fragmentManager;
 
-    private IndexListImpl impl;
+    private OnePager onePager;
+    private AllPager allPager;
+    private MePager mePager;
 
     @Override
     public int getLayoutId() {
@@ -25,35 +27,37 @@ public class MainActivity extends BaseActivity implements IndexListListener {
 
     @Override
     public void initView(View view) {
-        tv_show = (TextView) findViewById(R.id.tv_show);
         bnv_show = (BottomNavigationView) findViewById(R.id.bnv_show);
-        bnv_show.setOnBottonNavigationClickListener(new BottomNavigationView.OnBottonNavigationClickListener() {
-            @Override
-            public void onClick(int position) {
-                LogUtils.e("=====position===="+position);
-            }
-        });
+        fl_container = (FrameLayout) findViewById(R.id.fl_container);
+
     }
 
     @Override
     public void init() {
-        impl = new IndexListImpl();
-        impl.getIndexList(this);
+        onePager = new OnePager();
+        mePager = new MePager();
+        allPager = new AllPager();
+
+        fragmentManager = getSupportFragmentManager();
+        fragmentManager.beginTransaction().add(R.id.fl_container, onePager).add(R.id.fl_container, allPager).add(R.id.fl_container, mePager).show(onePager).hide(allPager).hide(mePager).commit();
+
+        bnv_show.setOnBottonNavigationClickListener(new BottomNavigationView.OnBottonNavigationClickListener() {
+            @Override
+            public void onClick(int position) {
+                switch (position) {
+                    case 0:
+                        fragmentManager.beginTransaction().show(onePager).hide(mePager).hide(allPager).commit();
+                        break;
+                    case 1:
+                        fragmentManager.beginTransaction().hide(onePager).hide(mePager).show(allPager).commit();
+                        break;
+                    case 2:
+                        fragmentManager.beginTransaction().hide(onePager).show(mePager).hide(allPager).commit();
+                        break;
+                }
+            }
+        });
     }
 
 
-    @Override
-    public void initData(Object indexList) {
-        if (indexList instanceof IndexList) {
-            LogUtils.e(indexList.toString());
-            impl.getOneList(((IndexList) indexList).getData().get(0), this);
-        } else if (indexList instanceof OneList) {
-            LogUtils.e(indexList.toString());
-        }
-    }
-
-    @Override
-    public void error(String errorMsg) {
-        LogUtils.e(errorMsg);
-    }
 }
