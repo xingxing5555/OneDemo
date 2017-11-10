@@ -1,5 +1,7 @@
 package com.example.admin.basic.net;
 
+import com.facebook.stetho.okhttp3.StethoInterceptor;
+
 import java.io.IOException;
 
 import okhttp3.Interceptor;
@@ -28,6 +30,7 @@ public class RequestManager {
                 .baseUrl(URL)
                 .addConverterFactory(GsonConverterFactory.create())
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+                .client(getClient())
                 .build();
         networkService = retrofit.create(NetworkService.class);
         return networkService;
@@ -48,9 +51,13 @@ public class RequestManager {
         return networkService;
     }
 
+    private static OkHttpClient getClient(){
+        client = new OkHttpClient.Builder().addNetworkInterceptor(new StethoInterceptor()).build();
+        return client;
+    }
 
     private static OkHttpClient getHeaderClient() {
-        client = new OkHttpClient.Builder().addInterceptor(new HeaderInterceptor()).build();
+        client = new OkHttpClient.Builder().addNetworkInterceptor(new StethoInterceptor()).addInterceptor(new HeaderInterceptor()).build();
         return client;
     }
 

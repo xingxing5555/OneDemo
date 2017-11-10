@@ -17,6 +17,7 @@ import com.example.admin.basic.utils.LogUtils;
  */
 public class OnePager extends BaseFragment implements IndexListListener {
     private IndexListImpl impl;
+    private OneList oneList;
     @Override
     public int getLayoutId() {
         return R.layout.fragment_one_pager;
@@ -39,7 +40,7 @@ public class OnePager extends BaseFragment implements IndexListListener {
             LogUtils.e(indexList.toString());
             impl.getOneList(((IndexList) indexList).getData().get(0), this);
         } else if (indexList instanceof OneList) {
-            LogUtils.e(indexList.toString());
+            oneList = (OneList) indexList;
         }
     }
 
